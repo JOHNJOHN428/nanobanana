@@ -11,6 +11,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let selectedFiles = [];
 
+    // 从本地存储加载API密钥
+    const savedApiKey = localStorage.getItem('openrouter_api_key');
+    if (savedApiKey) {
+        apiKeyInput.value = savedApiKey;
+    }
+
+    // 保存API密钥到本地存储
+    apiKeyInput.addEventListener('input', (e) => {
+        const apiKey = e.target.value.trim();
+        if (apiKey) {
+            localStorage.setItem('openrouter_api_key', apiKey);
+        } else {
+            localStorage.removeItem('openrouter_api_key');
+        }
+    });
+
+    // 清除API密钥按钮功能
+    const clearApiKeyBtn = document.getElementById('clear-api-key');
+    clearApiKeyBtn.addEventListener('click', () => {
+        if (confirm('确定要清除已保存的API密钥吗？')) {
+            localStorage.removeItem('openrouter_api_key');
+            apiKeyInput.value = '';
+            alert('API密钥已清除');
+        }
+    });
+
     // 拖放功能
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         uploadArea.addEventListener(eventName, preventDefaults, false);
